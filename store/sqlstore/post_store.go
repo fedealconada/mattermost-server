@@ -105,8 +105,7 @@ func (s *SqlPostStore) Save(post *model.Post) (*model.Post, *model.AppError) {
 		if _, err := s.GetMaster().Exec("UPDATE Posts SET UpdateAt = :UpdateAt WHERE Id = :RootId", map[string]interface{}{"UpdateAt": time, "RootId": post.RootId}); err != nil {
 			mlog.Error("Error updating Post UpdateAt.", mlog.Err(err))
 		}
-	} else {
-		if count, err := s.GetMaster().SelectInt("SELECT COUNT(*) FROM Posts WHERE RootId = :Id", map[string]interface{}{"Id": post.Id}); err != nil {
+		if count, err := s.GetMaster().SelectInt("SELECT COUNT(*) FROM Posts WHERE RootId = :Id", map[string]interface{}{"Id": post.RootId}); err != nil {
 			mlog.Error("Error fetching post's thread.", mlog.Err(err))
 		} else {
 			post.ReplyCount = count
